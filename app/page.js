@@ -335,9 +335,10 @@ export default function Home() {
             /* PLATFORM CATALOG MARKETPLACE EXPLORER */
             <div className="h-full overflow-y-auto p-6 md:p-8 flex flex-col gap-8 w-full">
               
-              <div className="bg-gradient-to-r from-[#17201c] to-[#111215] border border-white/[0.04] rounded-2xl p-6 relative overflow-hidden shrink-0 w-full">
-                <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">Deploy Specialized AI Endpoints Instantly.</h1>
-                <p className="text-xs text-neutral-400 mt-1 max-w-2xl">Click any title to view engine latency parameters and live runtime credentials before initializing nodes.</p>
+              <div className="bg-gradient-to-r from-[#1a0d1f] via-[#2d1a2e] to-[#1a1020] border border-white/[0.04] rounded-2xl p-6 relative overflow-hidden shrink-0 w-full">
+                <span className="text-[10px] bg-[#1dbf73] text-black font-black tracking-widest uppercase px-2 py-0.5 rounded mb-3 inline-block">The Vision Alpha</span>
+                <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">Why lease individual tools when you can control the entire stack?</h1>
+                <p className="text-xs text-neutral-400 mt-1 max-w-2xl">Stackerr aggregates autonomous nodes. Buy your enterprise bundle, load your keys, and trigger multiple AI workflows instantly from a single secure account dashboard.</p>
               </div>
 
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/[0.04] pb-4 w-full">
