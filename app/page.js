@@ -22,13 +22,17 @@ export default function Home() {
   const [isGroupChat, setIsGroupChat] = useState(true);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'signup' | 'creator' | null
   
+  // FORM FIELDS FOR RECONFIGURED FRIENDLY SIGNIN/SIGNUP
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+
   const [discussionMessages, setDiscussionMessages] = useState([
     { sender: "System", text: "Welcome to your centralized operational dashboard. Type a message below to coordinate your active AI assets.", type: "system" }
   ]);
   const [chatInput, setChatInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // REAL INTERACTIVE CATEGORY AND SEARCH FILTERS
   const filteredData = DATASET.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase()) || item.category.toLowerCase().includes(search.toLowerCase());
     if (!matchesSearch) return false;
@@ -36,7 +40,6 @@ export default function Home() {
     return item.section === currentView;
   });
 
-  // REACTIVE ACQUISITION LOOP
   const acquireModel = (id) => {
     if (!ownedModelIds.includes(id)) {
       setOwnedModelIds(prev => [...prev, id]);
@@ -45,11 +48,13 @@ export default function Home() {
     }
   };
 
+  // BROADCAST MESSAGE SUBMIT METHOD
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
 
-    setDiscussionMessages(prev => [...prev, { sender: "You", text: chatInput, type: "user" }]);
+    const userMsg = chatInput;
+    setDiscussionMessages(prev => [...prev, { sender: "You", text: userMsg, type: "user" }]);
     setChatInput('');
     setIsProcessing(true);
 
@@ -74,10 +79,19 @@ export default function Home() {
     }, 600);
   };
 
+  const handleAuthSubmit = (e) => {
+    e.preventDefault();
+    alert(`Success! Logged in securely as ${authEmail}`);
+    setActiveModal(null);
+    setAuthEmail('');
+    setAuthPassword('');
+    setAuthName('');
+  };
+
   return (
     <div className="min-h-screen bg-[#0d0e10] text-[#f4f5f7] font-sans antialiased flex flex-col h-screen overflow-hidden relative">
       
-      {/* GLOBAL TOP NAVIGATION BRAND BAR */}
+      {/* BRAND HEADER BAR */}
       <nav className="bg-[#111215] border-b border-white/[0.05] h-16 flex items-center justify-between px-6 shrink-0 z-20">
         <div className="flex items-center">
           <span className="text-2xl font-black text-white tracking-tight cursor-pointer select-none" onClick={() => setCurrentView('all')}>
@@ -85,7 +99,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* CONTROLS & AUTH MATRIX */}
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setCurrentView('dashboard')}
@@ -107,17 +120,17 @@ export default function Home() {
             <button onClick={() => setActiveModal('signin')} className="text-xs font-semibold text-neutral-400 hover:text-white px-2 py-1 transition-colors">
               Sign In
             </button>
-            <button onClick={() => setActiveModal('signup')} className="bg-white hover:bg-neutral-200 text-black text-xs font-bold px-3 py-1.5 rounded-lg transition-all">
+            <button onClick={() => setActiveModal('signup')} className="bg-[#1dbf73] text-black text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#19a763] transition-all">
               Sign Up
             </button>
           </div>
         </div>
       </nav>
 
-      {/* MAIN LAYOUT SPLIT */}
+      {/* CORE WORKSPACE CONTENT AND LAYOUT */}
       <div className="flex flex-1 overflow-hidden w-full">
         
-        {/* SIDE NAVIGATION PANEL */}
+        {/* SIDE NAVIGATION BAR */}
         <aside className="w-56 bg-[#111215] border-r border-white/[0.02] p-3 flex flex-col justify-between shrink-0 select-none z-10">
           <div className="flex flex-col gap-1 overflow-y-auto max-h-full pr-1 scrollbar-none">
             
@@ -162,14 +175,13 @@ export default function Home() {
           </div>
         </aside>
 
-        {/* CORE CONTENT CANVAS */}
+        {/* CORE GRID ARCHITECTURE VIEWER */}
         <main className="flex-1 h-full overflow-hidden bg-[#0d0e10] w-full">
           
           {currentView !== 'dashboard' ? (
             /* PLATFORM DISCOVERY VIEW */
             <div className="h-full overflow-y-auto p-6 md:p-8 flex flex-col gap-8 w-full">
               
-              {/* HERO BANNER ELEMENT */}
               <div className="bg-gradient-to-r from-[#421d2a] via-[#2d1b2c] to-[#14151b] border border-white/[0.04] rounded-2xl p-8 relative overflow-hidden shadow-xl shrink-0 w-full">
                 <div className="max-w-2xl relative z-10">
                   <span className="bg-[#1dbf73] text-white text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full shadow-sm">
@@ -184,7 +196,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* CONTROLS ROW */}
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/[0.04] pb-4 w-full">
                 <div>
                   <h2 className="text-base font-bold text-white tracking-tight capitalize">Explore {currentView} Services</h2>
@@ -205,7 +216,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* CARD GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full pb-12">
                 {filteredData.map((item) => (
                   <div key={item.id} className="bg-[#17181c] border border-white/[0.03] hover:border-white/[0.1] rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 shadow-md hover:shadow-xl group">
@@ -247,7 +257,7 @@ export default function Home() {
 
             </div>
           ) : (
-            /* CONSOLE CONTROL TIER */
+            /* FIX: RE-ENABLED COMPREHENSIVE TEXT/TYPING DASHBOARD PIPELINE */
             <div className="h-full flex flex-col justify-between relative max-w-5xl mx-auto px-6 w-full">
               <div className="pt-6 pb-3 border-b border-white/[0.05] bg-[#0d0e10] z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
@@ -285,7 +295,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* TIMELINE MESSAGES */}
+              {/* LIVE LOG TIMELINE DISPLAY */}
               <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-4 pr-2 scrollbar-none">
                 {discussionMessages.map((msg, idx) => (
                   <div key={idx} className="max-w-4xl flex flex-col gap-1 bg-[#17181c]/40 border border-white/[0.02] p-4 rounded-xl">
@@ -298,17 +308,17 @@ export default function Home() {
                 {isProcessing && <div className="text-xs text-neutral-400 font-bold animate-pulse px-4">Processing concurrent cluster logs...</div>}
               </div>
 
-              {/* INPUT BAR CONTAINER */}
+              {/* CHAT INPUT CONTAINER FOR BROADCASTS */}
               <div className="pb-8 pt-2 bg-[#0d0e10]">
                 <form onSubmit={handleSendMessage} className="relative max-w-4xl mx-auto flex items-center bg-[#17181c] rounded-full border border-white/[0.04]">
                   <input 
                     type="text" 
                     placeholder={isGroupChat ? "Broadcast system directive to all active workspace layers..." : "Direct prompt connection link..."}
                     value={chatInput}
-                    onChange={(e) => setChatInput(e.trimStart())}
+                    onChange={(e) => setChatInput(e.target.value)}
                     className="w-full bg-transparent text-xs text-white placeholder-neutral-500 px-6 py-4 focus:outline-none"
                   />
-                  <button type="submit" className="absolute right-3 bg-[#1dbf73] text-black text-xs font-extrabold px-5 py-2 rounded-full">
+                  <button type="submit" className="absolute right-3 bg-[#1dbf73] text-black text-xs font-extrabold px-5 py-2 rounded-full hover:bg-[#19a763] transition-colors">
                     Broadcast
                   </button>
                 </form>
@@ -318,28 +328,77 @@ export default function Home() {
         </main>
       </div>
 
-      {/* NEW INTERACTIVE AUTHENTICATION MODALS LAYER */}
+      {/* NEW UPGRADED PREMIUM FRIENDLY AUTHENTICATION OVERLAYS */}
       {activeModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#17181c] border border-white/[0.06] rounded-xl max-w-md w-full p-6 relative shadow-2xl">
-            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm font-bold">✕</button>
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-[#17181c] border border-white/[0.08] rounded-2xl max-w-sm w-full p-8 relative shadow-2xl transition-all">
+            <button onClick={() => setActiveModal(null)} className="absolute top-5 right-5 text-neutral-500 hover:text-white text-xs transition-colors">✕ Close</button>
             
-            {activeModal === 'creator' ? (
+            {activeModal === 'creator' && (
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">Initialize Creator Gateway</h3>
-                <p className="text-xs text-neutral-400 mb-4">Deploy custom API endpoint nodes directly into the Stackerr indexing registry. Set your monetization criteria below.</p>
-                <input type="text" placeholder="Base Endpoint URL (e.g., https://api.yourdomain.com)" className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-lg text-xs text-white mb-3 focus:outline-none" />
-                <button onClick={() => { alert('API endpoint mapped to staging environment.'); setActiveModal(null); }} className="w-full bg-[#1dbf73] text-black font-bold text-xs py-2.5 rounded-lg">Deploy Access Node</button>
-              </div>
-            ) : (
-              <div>
-                <h3 className="text-lg font-bold text-white mb-2 capitalize">{activeModal === 'signin' ? 'Welcome Back' : 'Create Enterprise Account'}</h3>
-                <p className="text-xs text-neutral-400 mb-4">Access centralized API clusters from one localized console invoice.</p>
-                <input type="email" placeholder="Corporate Email Address" className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-lg text-xs text-white mb-3 focus:outline-none" />
-                <input type="password" placeholder="Account Token Key" className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-lg text-xs text-white mb-4 focus:outline-none" />
-                <button onClick={() => { alert('Session token set successfully.'); setActiveModal(null); }} className="w-full bg-white text-black font-bold text-xs py-2.5 rounded-lg">Authenticate Profile</button>
+                <span className="text-[#1dbf73] font-bold text-[10px] tracking-widest uppercase bg-[#1dbf73]/10 px-2.5 py-1 rounded-full">Earn on Stackerr</span>
+                <h3 className="text-xl font-black text-white mt-3 mb-1">Join as a Seller</h3>
+                <p className="text-xs text-neutral-400 mb-6">List custom API endpoints and software nodes to over 100k corporate subscribers.</p>
+                <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
+                  <input type="text" required placeholder="Choose a public workspace name (e.g., StarLabs)" value={authName} onChange={(e) => setAuthName(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  <input type="url" required placeholder="API Base Link (https://api.yourbrand.com)" className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  <button type="submit" className="w-full bg-[#1dbf73] text-black font-extrabold text-xs py-3.5 rounded-xl hover:bg-[#19a763] transition-all mt-2">Initialize Storefront</button>
+                </form>
               </div>
             )}
+
+            {activeModal === 'signin' && (
+              <div>
+                <h3 className="text-xl font-black text-white mb-1">Sign In to Stackerr</h3>
+                <p className="text-xs text-neutral-400 mb-6">Welcome back! Access your active nodes and orchestration layouts.</p>
+                
+                <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">Email address</label>
+                    <input type="email" required placeholder="name@domain.com" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">Password</label>
+                    <input type="password" required placeholder="Enter your secret key" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  </div>
+                  
+                  <button type="submit" className="w-full bg-[#1dbf73] text-black font-extrabold text-xs py-3.5 rounded-xl hover:bg-[#19a763] transition-all mt-2">Continue</button>
+                </form>
+
+                <p className="text-center text-xs text-neutral-500 mt-6 font-medium">
+                  Not a member yet? <span onClick={() => { setActiveModal('signup'); }} className="text-[#1dbf73] cursor-pointer hover:underline">Join now</span>
+                </p>
+              </div>
+            )}
+
+            {activeModal === 'signup' && (
+              <div>
+                <h3 className="text-xl font-black text-white mb-1">Create a new account</h3>
+                <p className="text-xs text-neutral-400 mb-6">Join our decentralized ecosystem to provision specialized model layers instantly.</p>
+                
+                <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">Choose a username</label>
+                    <input type="text" required placeholder="devMaster" value={authName} onChange={(e) => setAuthName(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">Email address</label>
+                    <input type="email" required placeholder="name@example.com" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">Password</label>
+                    <input type="password" required placeholder="Create strong security phrase" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500 transition-all" />
+                  </div>
+                  
+                  <button type="submit" className="w-full bg-[#1dbf73] text-black font-extrabold text-xs py-3.5 rounded-xl hover:bg-[#19a763] transition-all mt-2">Create Account</button>
+                </form>
+
+                <p className="text-center text-xs text-neutral-500 mt-6 font-medium">
+                  Already have an account? <span onClick={() => { setActiveModal('signin'); }} className="text-[#1dbf73] cursor-pointer hover:underline">Sign In</span>
+                </p>
+              </div>
+            )}
+
           </div>
         </div>
       )}
