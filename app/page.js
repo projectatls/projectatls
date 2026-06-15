@@ -2,192 +2,170 @@
 import { useState } from 'react';
 
 const DATASET = [
-  { id: 1, name: "Make.com Workflow Node", category: "Automation", desc: "Visual automation platform to connect apps and build complex, multi-step cloud workflows without code.", badge: "Core Engine", cost: "Freemium", featured: true },
-  { id: 2, name: "v0.dev Component Generator", category: "Development", desc: "Generative UI system by Vercel that converts simple text prompts into production-ready React and Tailwind components.", badge: "AI Infra", cost: "Free Tier", featured: false },
-  { id: 3, name: "Clay.com Data Enrichment", category: "Lead Gen", desc: "Maximize outbound scale by combining 50+ data providers into a single, automated spreadsheet pipeline.", badge: "Data Proxy", cost: "Paid Scale", featured: true },
-  { id: 4, name: "Supabase Relational Database", category: "Database", desc: "Open-source Postgres suite providing realtime data synchronization, instant REST APIs, and secure authentication channels.", badge: "Postgres", cost: "Open Source", featured: false },
-  { id: 5, name: "Cursor AI Code Editor", category: "Development", desc: "An advanced fork of VS Code deeply integrated with context-aware AI agents for rapid codebase engineering.", badge: "IDE Subsystem", cost: "Usage Based", featured: false },
-  { id: 6, name: "Phantombuster Cloud Scaler", category: "Lead Gen", desc: "Cloud-based data extraction and automation tools to scrape the web and generate high-yield lead lists on autopilot.", badge: "Browser Agent", cost: "Free Trial", featured: false },
+  { id: 1, name: "Make.com Automation Suite", category: "Automation", curator: "WorkflowMaster", views: "14.2k clicks", status: "TRENDING", bgGradient: "from-indigo-600 via-purple-700 to-pink-500", featured: true },
+  { id: 2, name: "v0.dev Frontend Engine", category: "Development", curator: "VercelDev", views: "38.5k clicks", status: "HOT", bgGradient: "from-neutral-900 via-neutral-800 to-zinc-700", featured: false },
+  { id: 3, name: "Clay.com Data Enrichment", category: "Lead Gen", curator: "GrowthHacker", views: "9.1k clicks", status: "POPULAR", bgGradient: "from-emerald-600 via-teal-700 to-cyan-500", featured: true },
+  { id: 4, name: "Supabase Relational Postgres", category: "Database", curator: "DB_Architect", views: "22.4k clicks", status: "STABLE", bgGradient: "from-cyan-900 via-blue-950 to-slate-900", featured: false },
+  { id: 5, name: "Cursor AI Programmatic IDE", category: "Development", curator: "CodeAgent", views: "51.3k clicks", status: "META", bgGradient: "from-amber-600 via-orange-700 to-red-600", featured: false },
+  { id: 6, name: "Phantombuster Cloud Agents", category: "Lead Gen", curator: "PhantomScrape", views: "11.1k clicks", status: "ACTIVE", bgGradient: "from-fuchsia-600 via-pink-700 to-rose-600", featured: false },
 ];
 
-const CATEGORIES = ["All Systems", "Automation", "Development", "Lead Gen", "Database"];
+const CATEGORIES = ["All Items", "Automation", "Development", "Lead Gen", "Database"];
 
 export default function Home() {
   const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState('All Systems');
-  const [selectedTool, setSelectedTool] = useState(DATASET[0]);
+  const [activeCategory, setActiveCategory] = useState('All Items');
 
   const filteredData = DATASET.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase()) || 
-                          item.category.toLowerCase().includes(search.toLowerCase()) ||
-                          item.desc.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = activeCategory === 'All Systems' || item.category === activeCategory;
+    const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase()) || item.category.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = activeCategory === 'All Items' || item.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
   return (
-    <div className="min-h-screen bg-[#050507] text-[#e2e8f0] font-sans antialiased flex flex-col selection:bg-blue-500/30">
+    <div className="min-h-screen bg-[#0b0c10] text-[#f0f2f5] font-sans antialiased flex flex-col selection:bg-purple-500/30">
       
-      {/* COMMAND HEADER */}
-      <header className="sticky top-0 z-50 bg-[#050507]/80 backdrop-blur-md border-b border-white/[0.06] h-14 flex items-center justify-between px-6">
-        <div className="flex items-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
-          <span className="text-xs font-black tracking-[0.2em] text-white font-mono">
-            ATLAS<span className="text-blue-500">_MATRIX</span>
+      {/* SPOTIFY STYLE STICKY HEADER */}
+      <nav className="sticky top-0 z-50 bg-[#0b0c10]/95 backdrop-blur-md h-16 flex items-center justify-between px-6 border-b border-white/[0.03]">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_12px_#a855f7]"></div>
+          <span className="text-sm font-black tracking-widest text-white font-mono">
+            PROJECT_ATLAS // <span className="text-purple-400 font-bold">SHOP</span>
           </span>
         </div>
 
-        {/* INTEGRATED SEARCH HUB */}
-        <div className="flex flex-1 max-w-xl mx-8">
-          <div className="flex w-full bg-white/[0.02] border border-white/[0.08] rounded-full px-4 py-1.5 focus-within:border-blue-500/50 focus-within:bg-white/[0.04] transition-all">
+        {/* CONSUMER SEARCH BAR */}
+        <div className="flex flex-1 max-w-md mx-6">
+          <div className="flex w-full bg-[#161822] border border-white/[0.05] rounded-full px-4 py-2 focus-within:border-purple-500/50 transition-all">
             <input
               type="text"
-              placeholder="Type to filter node array instantly..."
+              placeholder="What stack are you looking for today?..."
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                // Auto-select first matching item to keep layout filled
-                const matches = DATASET.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
-                if (matches.length > 0) setSelectedTool(matches[0]);
-              }}
-              className="w-full bg-transparent text-xs text-slate-200 placeholder-slate-500 focus:outline-none font-mono"
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-transparent text-xs text-white placeholder-neutral-500 focus:outline-none"
             />
           </div>
         </div>
 
+        {/* FORTNITE SHOP PREMIUM SLOT CALL-TO-ACTION */}
         <div>
           <button 
-            onClick={() => alert('Sponsorship terminal initializing secure payment...')}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] px-4 py-2 rounded-full font-mono transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] active:scale-95"
+            onClick={() => alert('Opening Secure Sponsorship Vault...')}
+            className="relative px-5 py-2.5 rounded-full text-xs font-black tracking-wider uppercase text-white overflow-hidden group bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(236,72,153,0.6)] transition-all duration-300 hover:scale-105 active:scale-95"
           >
-            + Feature Your Tool ($15)
+            <span className="relative z-10">+ Submit Your Tool ($15)</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           </button>
         </div>
-      </header>
+      </nav>
 
-      {/* DASHBOARD WORKSPACE */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* SHOP MAIN LAYOUT CONTAINER */}
+      <div className="flex flex-1">
         
-        {/* LEFT COLUMN: NAVIGATION & FILTER RUNWAY */}
-        <aside className="w-56 bg-[#050507] p-4 hidden md:flex flex-col gap-1 border-r border-white/[0.04] font-mono text-[11px]">
-          <div className="text-slate-500 font-bold px-2 uppercase tracking-widest text-[9px] mb-3">System Filters</div>
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => {
-                setActiveCategory(cat);
-                const matches = DATASET.filter(i => cat === 'All Systems' || i.category === cat);
-                if (matches.length > 0) setSelectedTool(matches[0]);
-              }}
-              className={`w-full text-left px-3 py-2 rounded-lg transition-all ${
-                activeCategory === cat 
-                  ? 'bg-white/[0.05] text-blue-400 font-bold border border-white/[0.08]' 
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'
-              }`}
-            >
-              {cat === 'All Systems' ? '⊙ ' : '⬡ '} {cat.toUpperCase()}
-            </button>
-          ))}
-
-          <div className="mt-auto border-t border-white/[0.04] pt-4 px-2 flex flex-col gap-2 text-[10px] text-slate-500">
-            <div>NETWORK // EDGE_ACTIVE</div>
-            <div>LOAD // STABLE</div>
-          </div>
+        {/* LEFTSIDE MINI NAVIGATION BAR */}
+        <aside className="w-60 bg-[#0b0c10] p-4 hidden lg:flex flex-col gap-1 border-r border-white/[0.02] text-sm">
+          <div className="text-neutral-500 font-bold text-[10px] px-3 uppercase tracking-widest mb-3">Discover</div>
+          <div className="bg-white/[0.04] text-white px-3 py-2 rounded-xl font-bold cursor-pointer transition-all border border-white/[0.05]">✨ Featured Offers</div>
+          <div className="text-neutral-400 px-3 py-2 rounded-xl hover:bg-white/[0.02] cursor-pointer transition-colors mt-1">🚀 Highly Voted</div>
+          <div className="text-neutral-400 px-3 py-2 rounded-xl hover:bg-white/[0.02] cursor-pointer transition-colors mt-1">🕒 Vault Archives</div>
         </aside>
 
-        {/* CENTER COLUMN: HIGH-DENSITY SCAN MATRIX */}
-        <main className="flex-1 overflow-y-auto p-6 border-r border-white/[0.04]">
-          <div className="flex flex-col gap-2">
-            {filteredData.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => setSelectedTool(item)}
-                className={`w-full text-left p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
-                  selectedTool.id === item.id
-                    ? 'bg-blue-600/[0.04] border-blue-500/40 shadow-[0_0_15px_rgba(59,130,246,0.05)]'
-                    : 'bg-white/[0.01] border-white/[0.04] hover:bg-white/[0.02] hover:border-white/[0.08]'
+        {/* CONTENT ROW */}
+        <main className="flex-1 p-6 md:p-8 bg-gradient-to-b from-[#111219] to-[#0b0c10]">
+          
+          {/* HORIZONTAL CAPSULE PILLS (Fortnite / Spotify Tag Matrix) */}
+          <div className="flex gap-2 overflow-x-auto pb-4 mb-8 border-b border-white/[0.04]">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${
+                  activeCategory === cat 
+                    ? 'bg-white text-black scale-105 shadow-md shadow-white/10' 
+                    : 'bg-[#1c1e27] text-neutral-300 hover:bg-[#282a36] hover:text-white'
                 }`}
               >
-                <div className="flex items-center gap-4 min-w-0">
-                  {/* Status Node Indicator */}
-                  <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.featured ? 'bg-blue-400 shadow-[0_0_6px_#60a5fa]' : 'bg-slate-700'}`} />
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* EYE-POPPING MARKETPLACE GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredData.map((item) => (
+              <div 
+                key={item.id} 
+                className={`group relative bg-[#151722] rounded-2xl border transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
+                  item.featured 
+                    ? 'border-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.15)] ring-1 ring-purple-500/50' 
+                    : 'border-white/[0.04] hover:border-white/[0.12] hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
+                }`}
+              >
+                
+                {/* HIGH-IMPACT THUMBNAIL DISPLAY CARD CONTAINER */}
+                <div className={`w-full aspect-[16/10] bg-gradient-to-br ${item.bgGradient} flex flex-col justify-between p-4 relative overflow-hidden group-hover:brightness-110 transition-all`}>
                   
-                  <div className="min-w-0">
-                    <h3 className="text-sm font-semibold text-white tracking-tight truncate">{item.name}</h3>
-                    <p className="text-xs text-slate-400 font-mono mt-0.5">{item.category} • {item.cost}</p>
+                  {/* CARD TOP DECORATORS */}
+                  <div className="flex justify-between items-center z-10">
+                    <span className="bg-black/60 backdrop-blur-md text-[10px] text-white font-black uppercase tracking-widest px-2 py-0.5 rounded-full border border-white/[0.1]">
+                      {item.status}
+                    </span>
+                    {item.featured && (
+                      <span className="bg-yellow-400 text-black text-[9px] font-black tracking-widest uppercase px-2 py-0.5 rounded shadow-md animate-pulse">
+                        EPIC OFFER
+                      </span>
+                    )}
                   </div>
+
+                  {/* VISUAL CENTER BANNER TEXT */}
+                  <div className="z-10 text-center transform group-hover:scale-105 transition-transform duration-300">
+                    <h2 className="text-white text-xl font-black uppercase tracking-tighter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]">
+                      {item.category}
+                    </h2>
+                    <span className="text-[10px] text-white/70 font-mono tracking-widest uppercase block mt-1">
+                      [ NODE_ACTIVE_STK ]
+                    </span>
+                  </div>
+
+                  {/* BOTTOM DECORATOR BLOCK */}
+                  <div className="z-10 flex justify-between items-center font-mono text-[10px] text-white/90 drop-shadow-sm">
+                    <span>⚡ INITIALIZE</span>
+                    <span>v2.44</span>
+                  </div>
+
+                  {/* Card overlay shine filter */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 pointer-events-none"></div>
                 </div>
 
-                <div className="flex items-center gap-3 shrink-0 font-mono text-[10px]">
-                  <span className="bg-white/[0.04] text-slate-400 px-2 py-0.5 rounded border border-white/[0.04]">
-                    {item.badge}
-                  </span>
-                  {item.featured && (
-                    <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded font-bold tracking-wider text-[9px]">
-                      FEATURED
-                    </span>
-                  )}
+                {/* USER-FRIENDLY METADATA BLOCK */}
+                <div className="p-4 flex gap-3 items-start bg-[#151722]">
+                  
+                  {/* Dynamic Circular Creator Profile Initial Icon */}
+                  <div className="w-10 h-10 rounded-xl bg-[#202334] border border-white/[0.08] flex items-center justify-center font-black text-sm text-purple-400 shrink-0 shadow-inner">
+                    {item.curator.charAt(0)}
+                  </div>
+                  
+                  {/* Primary text descriptions */}
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <h3 className="text-sm font-black text-white tracking-tight truncate group-hover:text-purple-400 transition-colors leading-tight">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-neutral-400 mt-1 flex items-center gap-1 font-medium">
+                      by <span className="text-neutral-300 underline decoration-purple-500/50 hover:text-white transition-colors cursor-pointer">{item.curator}</span>
+                    </p>
+                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/[0.03] text-[11px] text-neutral-500 font-mono">
+                      <span>👁️ {item.views}</span>
+                      <span className="text-purple-400 font-bold uppercase tracking-wider text-[10px]">Inspect ➔</span>
+                    </div>
+                  </div>
+
                 </div>
+
               </div>
             ))}
-            {filteredData.length === 0 && (
-              <div className="text-center py-12 font-mono text-xs text-slate-500">
-                No system nodes matching parameters found.
-              </div>
-            )}
           </div>
+
         </main>
-
-        {/* RIGHT COLUMN: TERMINAL CONTROL INSPECTOR (THE HOOK) */}
-        <aside className="w-96 bg-[#07070a] p-6 hidden lg:flex flex-col border-l border-white/[0.02] overflow-y-auto">
-          {selectedTool ? (
-            <div className="flex flex-col h-full gap-5">
-              <div className="font-mono text-[10px] text-slate-500 tracking-widest uppercase">
-                // System_Inspector_Node_{selectedTool.id}
-              </div>
-              
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold text-white tracking-tight">{selectedTool.name}</h2>
-                </div>
-                <span className="inline-block mt-2 text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">
-                  {selectedTool.category.toUpperCase()}
-                </span>
-              </div>
-
-              <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4 flex flex-col gap-3">
-                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block">// Operational Overview</span>
-                <p className="text-xs text-slate-300 leading-relaxed">{selectedTool.desc}</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 font-mono text-[11px]">
-                <div className="bg-white/[0.01] border border-white/[0.04] p-3 rounded-lg">
-                  <span className="text-slate-500 block text-[9px] uppercase tracking-wider">Pricing Architecture</span>
-                  <span className="text-white font-semibold block mt-0.5">{selectedTool.cost}</span>
-                </div>
-                <div className="bg-white/[0.01] border border-white/[0.04] p-3 rounded-lg">
-                  <span className="text-slate-500 block text-[9px] uppercase tracking-wider">Deploy Tag</span>
-                  <span className="text-white font-semibold block mt-0.5">{selectedTool.badge}</span>
-                </div>
-              </div>
-
-              <div className="mt-auto pt-6 border-t border-white/[0.04]">
-                <a
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); alert('Routing to partner application node...'); }}
-                  className="w-full bg-white hover:bg-slate-200 text-black font-semibold text-xs py-3 rounded-xl block text-center transition-all active:scale-[0.98]"
-                >
-                  Launch App Instance ↗
-                </a>
-              </div>
-            </div>
-          ) : (
-            <div className="h-full flex items-center justify-center font-mono text-xs text-slate-600">
-              Select an asset node to initialize telemetry.
-            </div>
-          )}
-        </aside>
-
       </div>
     </div>
   )
