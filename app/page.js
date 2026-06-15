@@ -138,11 +138,9 @@ export default function Home() {
   const [showModelSwitcher, setShowModelSwitcher] = useState(false);
   const [isGroupChat, setIsGroupChat] = useState(true);
   
-  // Modal toggle handlers
   const [activeModal, setActiveModal] = useState(null); 
   const [selectedDetailProduct, setSelectedDetailProduct] = useState(null); 
 
-  // Client-side authentication states
   const [userSession, setUserSession] = useState(null); 
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
@@ -154,7 +152,6 @@ export default function Home() {
   const [chatInput, setChatInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Hydrate states from browser memory on initialization to avoid reset on refresh
   useEffect(() => {
     const savedIds = localStorage.getItem('stackerr_owned_nodes');
     const savedUser = localStorage.getItem('stackerr_session');
@@ -335,6 +332,7 @@ export default function Home() {
             /* PLATFORM CATALOG MARKETPLACE EXPLORER */
             <div className="h-full overflow-y-auto p-6 md:p-8 flex flex-col gap-8 w-full">
               
+              {/* UPDATED HERO BANNER */}
               <div className="bg-gradient-to-r from-[#1a0d1f] via-[#2d1a2e] to-[#1a1020] border border-white/[0.04] rounded-2xl p-6 relative overflow-hidden shrink-0 w-full">
                 <span className="text-[10px] bg-[#1dbf73] text-black font-black tracking-widest uppercase px-2 py-0.5 rounded mb-3 inline-block">The Vision Alpha</span>
                 <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">Why lease individual tools when you can control the entire stack?</h1>
@@ -361,27 +359,39 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* UPDATED CARD GRID — fully clickable with hover tweens */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full pb-12">
                 {filteredData.map((item) => (
-                  <div key={item.id} className="bg-[#17181c] border border-white/[0.03] hover:border-white/[0.1] rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-200 shadow-md">
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedDetailProduct(item)}
+                    className="group bg-[#17181c] border border-white/[0.03] hover:border-[#1dbf73]/30 rounded-xl overflow-hidden flex flex-col justify-between cursor-pointer shadow-md transition-all duration-300 ease-out hover:shadow-[0_8px_32px_rgba(29,191,115,0.08)] hover:-translate-y-1 hover:scale-[1.015]"
+                  >
                     <div className="w-full aspect-[16/10] relative overflow-hidden bg-neutral-900 border-b border-white/[0.02]">
-                      <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                      <img
+                        src={item.img}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:brightness-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <span className="absolute bottom-2 left-3 text-[10px] font-black tracking-widest uppercase text-white bg-[#1dbf73] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0">
+                        View Specs
+                      </span>
                     </div>
 
                     <div className="p-4 flex flex-col gap-3 flex-1 justify-between">
                       <div className="flex flex-col gap-1">
                         <span className="text-[11px] font-bold text-[#1dbf73] uppercase tracking-wide">{item.category}</span>
-                        {/* CLICK TITLE FOR SPECS DIALOG POPUP */}
-                        <h3 onClick={() => setSelectedDetailProduct(item)} className="text-xs text-white font-bold leading-snug cursor-pointer hover:text-[#1dbf73] transition-colors underline decoration-dashed decoration-neutral-600">
+                        <h3 className="text-xs text-white font-bold leading-snug group-hover:text-[#1dbf73] transition-colors duration-200">
                           {item.title}
                         </h3>
                         <span className="text-[11px] text-neutral-400 font-medium mt-1">Curated by {item.curator}</span>
                       </div>
 
                       <div className="border-t border-white/[0.04] pt-3 mt-1 flex items-center justify-between text-xs">
-                        <button 
-                          onClick={() => acquireModel(item.id)}
-                          className={`text-[11px] font-bold px-3.5 py-2 rounded-lg transition-all ${ownedModelIds.includes(item.id) ? "bg-[#1dbf73] text-black" : "bg-[#222327] text-white hover:bg-neutral-700"}`}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); acquireModel(item.id); }}
+                          className={`text-[11px] font-bold px-3.5 py-2 rounded-lg transition-all duration-200 ${ownedModelIds.includes(item.id) ? "bg-[#1dbf73] text-black" : "bg-[#222327] text-white hover:bg-neutral-700"}`}
                         >
                           {ownedModelIds.includes(item.id) ? "Open Console" : "Add to Cluster"}
                         </button>
@@ -548,7 +558,6 @@ export default function Home() {
               <div>
                 <h3 className="text-xl font-black text-white mb-1">Sign In to Stackerr</h3>
                 <p className="text-xs text-neutral-400 mb-6">Welcome back! Access your active nodes and orchestration layouts.</p>
-                
                 <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
                   <input type="email" required placeholder="name@domain.com" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none" />
                   <input type="password" required placeholder="Enter your secret key" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none" />
@@ -564,7 +573,6 @@ export default function Home() {
               <div>
                 <h3 className="text-xl font-black text-white mb-1">Create a new account</h3>
                 <p className="text-xs text-neutral-400 mb-6">Join our decentralized ecosystem to provision specialized model layers instantly.</p>
-                
                 <form onSubmit={handleAuthSubmit} className="flex flex-col gap-3">
                   <input type="text" required placeholder="Choose a username" value={authName} onChange={(e) => setAuthName(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none" />
                   <input type="email" required placeholder="name@example.com" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} className="w-full bg-[#0d0e10] border border-white/[0.05] p-3 rounded-xl text-xs text-white focus:outline-none" />
